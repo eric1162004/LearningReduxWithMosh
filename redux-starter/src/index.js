@@ -1,15 +1,13 @@
-import configureStore from './store/configureStore';
-import * as actions from './store/bugs';
-import { projectAdded } from './store/projects';
+import configureStore from "./store/configureStore";
+import { getBugsByUser, loadBugs, assignBugToUser } from "./store/bugs";
 
 const store = configureStore();
 
-store.subscribe(() => {
-  console.log("changed!");
-});
+store.dispatch(loadBugs());
 
-store.dispatch(projectAdded({name:"Project 1"}));
-store.dispatch(actions.bugAdded({description: "Bug 1"}));
-store.dispatch(actions.bugAdded({description: "Bug 2"}));
-store.dispatch(actions.bugAdded({description: "Bug 3"}));
-store.dispatch(actions.bugResolved({id: 1}));
+setTimeout(() => {
+  store.dispatch(assignBugToUser(1, 2));
+}, 2000);
+
+const bugs = getBugsByUser(1)(store.getState());
+console.log(bugs);
